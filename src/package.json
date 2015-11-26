@@ -1,0 +1,14 @@
+{
+  "name": "RandomVerse",
+  "version": "1.0.0",
+  "description": "Random verse app developed with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ruslan Kazakov",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
