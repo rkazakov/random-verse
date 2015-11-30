@@ -1,17 +1,28 @@
 {
   "name": "RandomVerse",
-  "version": "1.0.0",
-  "description": "Random verse app developed with Node.js",
+  "version": "1.0.1",
+  "description": "Random Bible verse app developed with Node.js, React and Flux",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ruslan Kazakov",
+  "author": "Developers for Christ",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.13.3"
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "flux": "^2.1.1",
+    "history": "^1.13.1",
+    "object-assign": "^4.0.1",
+    "react": "^0.14.3",
+    "react-router": "^1.0.0"
   },
   "devDependencies": {
-    "locallydb": "^0.0.9"
+    "gulp": "^3.9.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-plumber": "^1.0.1",
+    "locallydb": "^0.0.9",
+    "reactify": "^1.1.1"
   }
 }

@@ -1,6 +1,6 @@
-var verse = get('/api/random');
+//var verse = get('/api/random');
 
-$('.verse').text(verse.text);
+//$('.verse').text(verse.text);
 
 function get(url) {
     return fetch(url, {
