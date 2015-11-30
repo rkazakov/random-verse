@@ -1,20 +1,21 @@
 var http = require('http');
 
-module.exports = function(param) {
+module.exports = function(param, callback) {
   // get
-  var optionsget = {
+  var options = {
     host: 'bibleapi-dev4christ.rhcloud.com',
     port: 80,
     path: '/' + param,
     method: 'GET'
   };
 
-  var reqGet = http.request(optionsget, function(res) {
+  var reqGet = http.request(options, function(res) {
     res.setEncoding('utf8');
     res.on('data', function(data) {
       //process.stdout.write(data);
-      var json = JSON.parse(data);
-      console.log(json[0].text);
+      //var json = JSON.parse(data);
+      //console.log(json[0].text);
+      callback(data);
     });
   });
   reqGet.end();
