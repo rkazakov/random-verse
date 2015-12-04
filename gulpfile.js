@@ -44,6 +44,7 @@ gulp.task('scripts', function() {
         console.log(error.message);
         this.emit('end');
     }}))
+    .pipe(browserify({ transform: 'reactify', debug: true }))
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(concat('main.js'))
@@ -53,14 +54,6 @@ gulp.task('scripts', function() {
     .pipe(uglify())
     .pipe(gulp.dest('public/scripts/'))
 });
-
-// gulp.task('browserify', function () {
-//   gulp.src('src/main.js')
-//     .pipe(plumber())
-//     .pipe(browserify({ transform: 'reactify', debug: true }))
-//     .pipe(concat('main.js'))
-//     .pipe(gulp.dest('public'));
-// });
 
 gulp.task('default', function() {
   gulp.watch("client/stylus/**/*.styl", ['styles']);
