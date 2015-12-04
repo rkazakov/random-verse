@@ -22,6 +22,7 @@
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.0",
     "gulp-plumber": "^1.0.1",
+    "gulp-stylus": "^2.1.1",
     "locallydb": "^0.0.9",
     "reactify": "^1.1.1"
   }
