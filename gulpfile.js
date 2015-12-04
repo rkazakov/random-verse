@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    connect = require('gulp-connect'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename');
 
@@ -53,6 +54,14 @@ gulp.task('scripts', function() {
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest('public/scripts/'))
+});
+
+gulp.task('webserver', function() {
+  connect.server({
+    port: 3000,
+    root: ['public'],
+    livereload: true
+  });
 });
 
 gulp.task('default', function() {
