@@ -16,5 +16,5 @@ app.use('/scripts', express.static(__dirname + '/scripts'));
 var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
-  console.log('running node...');
+  console.log('running localhost:' + port);
 });

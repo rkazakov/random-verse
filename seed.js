@@ -1,6 +1,6 @@
 var locallydb = require('locallydb');
 
-var db = new locallydb('_mockdb');
+var db = new locallydb('db');
 var collection = db.collection('verses');
 
 if (collection.items.length === 0)
