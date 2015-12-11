@@ -1,17 +1,23 @@
 var React = require('react');
-var ReactRouter = require('react-router');
-var Route = ReactRouter.Route;
-var API = require("./api");
+var ReactDOM = require('react-dom');
 
-var routes = (<Route handler={require('./components/App')}>
-    <Route name='home' path='/' handler={require('./components/Home')} />
-    <Route name='users' handler={require('./components/UserList')} />
-    <Route name='user' path='/user/:id' handler={require('./components/UserProfile')} />
-</Route>);
-
-API.startFetchingChirps();
-API.startFetchingUsers();
-
-ReactRouter.run(routes, ReactRouter.HistoryLocation, function (Root) {
-    React.render(<Root />, document.getElementById('app'));
+var Hello = React.createClass({
+  render: function() {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="one-half column test">
+            <h4>Basic Page</h4>
+            <p className="verse">So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.</p>
+            <p className="reference">{this.props.reference}</p>
+          </div>
+        </div>
+        <div className="row">
+          <input className="button-primary" type="button" value="Next verse" />
+        </div>
+      </div>
+    )
+  }
 });
+
+ReactDOM.render(<Hello reference='Isaiah 41:10' />, document.getElementById('app'));
