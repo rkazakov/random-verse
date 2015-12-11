@@ -7,7 +7,7 @@ var Hello = React.createClass({
       <div className="container">
         <div className="row">
           <div className="one-half column test">
-            <h4>Basic Page</h4>
+            <h4>{this.props.title}</h4>
             <p className="verse">So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.</p>
             <p className="reference">{this.props.reference}</p>
           </div>
@@ -20,4 +20,4 @@ var Hello = React.createClass({
   }
 });
 
-ReactDOM.render(<Hello reference='Isaiah 41:10' />, document.getElementById('app'));
+ReactDOM.render(<Hello title='Page' reference='Isaiah 41:10' />, document.getElementById('app'));

@@ -1,6 +1,6 @@
 {
   "name": "RandomVerse",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Random Bible verse app developed with Node.js, React and Flux",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "object-assign": "^4.0.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "react-router": "^1.0.0"
+    "react-router": "^1.0.2"
   },
   "devDependencies": {
     "browser-sync": "^2.10.0",
