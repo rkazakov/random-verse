@@ -11,6 +11,8 @@ router.get('/api/random/', function (req, res) {
   var ref = collection.get(random).reference;
 
   bibleApi(ref.replace(/ /g, "%20"), function(data) {
-      res.send(JSON.parse(data));
+      var verse = JSON.parse(data)[0];
+      verse.reference = ref;
+      res.send(verse);
   });
 });
