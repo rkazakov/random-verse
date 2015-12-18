@@ -1,7 +1,7 @@
 {
   "name": "RandomVerse",
-  "version": "1.0.3",
-  "description": "Random Bible verse app developed with Node.js, React and Flux",
+  "version": "1.0.4",
+  "description": "Random Bible verse app developed with Node.js and React",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,6 +30,7 @@
     "gulp-imagemin": "^2.4.0",
     "gulp-jshint": "^2.0.0",
     "gulp-minify-css": "^1.2.2",
+    "gulp-nodemon": "^2.0.4",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-stylus": "^2.1.1",
