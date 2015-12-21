@@ -1,15 +1,15 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var Hello = React.createClass({
+var Main = React.createClass({
   getInitialState: function() {
       return {
-          verse: "So do not fear, for I am with you;",
-          reference: "Isa 4:5"
+          verse: '',
+          reference: ''
       };
   },
   getRandomVerse: function () {
-    $.get('/api/random', function(data) {
+    $.get('/api/v1.0/verse/random/', function(data) {
       if (this.isMounted()) {
         this.setState({
           verse: data.text,
@@ -42,4 +42,4 @@ var Hello = React.createClass({
   }
 });
 
-ReactDOM.render(<Hello title='Page'/>, document.getElementById('app'));
+ReactDOM.render(<Main title='Page'/>, document.getElementById('app'));
