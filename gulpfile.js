@@ -5,7 +5,6 @@ var gulp = require('gulp'),
     stylus = require('gulp-stylus'),
     minifycss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer'),
-    imagemin = require('gulp-imagemin'),
     cache = require('gulp-cache'),
     babel = require('gulp-babel'),
     jshint = require('gulp-jshint'),
@@ -31,12 +30,6 @@ gulp.task('styles', function() {
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
     .pipe(gulp.dest('public/styles/'))
-});
-
-gulp.task('images', function() {
-  gulp.src('client/images/**/*')
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('public/images/'));
 });
 
 gulp.task('scripts', function() {
