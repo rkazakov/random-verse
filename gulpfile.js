@@ -1,16 +1,19 @@
+'use strict';
+
 var gulp = require('gulp'),
-    connect = require('gulp-connect'),
+    //connect = require('gulp-connect'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename'),
     stylus = require('gulp-stylus'),
     minifycss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer'),
-    cache = require('gulp-cache'),
+    //cache = require('gulp-cache'),
     babel = require('gulp-babel'),
     jshint = require('gulp-jshint'),
     browserSync = require('browser-sync'),
     concat = require('gulp-concat'),
-    reactify = require('reactify'),
+    //reactify = require('reactify'),
+    //babelify = require('babelify'),
     uglify = require('gulp-uglify'),
     browserify = require('gulp-browserify'),
     nodemon = require('gulp-nodemon');
@@ -35,15 +38,54 @@ gulp.task('styles', function() {
 gulp.task('scripts', function() {
   return gulp.src('client/scripts/**/*.js')
     .pipe(plumber())
-    .pipe(browserify({ transform: 'reactify', debug: true }))
+    //.pipe(browserify({ transform: 'reactify', debug: true }))
+    .pipe(browserify({ debug: true }))
     //.pipe(jshint())
     //.pipe(jshint.reporter('default'))
+    .pipe(babel({ compact: false }))
     .pipe(concat('main.js'))
-    //.pipe(babel())
     .pipe(gulp.dest('public/scripts/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest('public/scripts/'))
+});
+
+gulp.task('vendor', function() {
+  var libs = [
+    'react',
+    // 'react-dom',
+    // 'react-router',
+    // 'flux'
+    // 'react/lib/ReactCSSTransitionGroup',
+    // 'react/lib/cx',
+    // 'q',
+    // 'underscore',
+    // 'loglevel'
+  ];
+
+  var production = (process.env.NODE_ENV === 'production');
+  var stream = gulp.src('./gulp/noop.js', {read: false})
+    .pipe(browserify({
+        debug: false
+    }))
+    .on('prebundle', function(bundle) {
+      // Require vendor libraries and make them available outside the bundle.
+      libs.forEach(function(lib) {
+        bundle.require(lib);
+      });
+    });
+
+  if (production) {
+    // If this is a production build, minify it
+    stream.pipe(uglify());
+  }
+
+  // Give the destination file a name, adding '.min' if this is production
+  stream.pipe(rename('vendor' + (production ? '.min' : '') + '.js'))
+    // Save to the build directory
+    .pipe(gulp.dest('public/scripts/'));
+
+  return stream;
 });
 
 gulp.task('nodemon', function(cb) {
@@ -82,12 +124,12 @@ gulp.task('browser-sync', ['nodemon'], function() {
   });
 });
 
-gulp.task('bs-reload', function() {
+/*gulp.task('bs-reload', function() {
   browserSync.reload();
-});
+});*/
 
 gulp.task('default', ['browser-sync'], function() {
   gulp.watch('client/scripts/**/*.js', ['scripts', browserSync.reload]);
   gulp.watch('client/stylus/**/*.styl',  ['styles', browserSync.reload]);
-  gulp.watch('public/**/*.html', ['bs-reload']);
+  gulp.watch('public/**/*.html', [browserSync.reload]);
 });
