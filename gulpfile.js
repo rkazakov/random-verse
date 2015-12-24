@@ -12,7 +12,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
-    browserify = require('browserify'),
+    browserify = require('gulp-browserify'),
     nodemon = require('gulp-nodemon'),
     source = require('vinyl-source-stream');
 
@@ -34,27 +34,44 @@ gulp.task('styles', function() {
 });
 
 // http://stackoverflow.com/questions/22330103/how-to-include-node-modules-in-a-separate-browserify-vendor-bundle
-gulp.task('scripts-vendor', function() {
-  return browserify({ debug: false })
-    .require('react')
-    .require('react-dom')
-    .require('react-router')
-    .bundle()
-    .pipe(source('vendor.js'))
+gulp.task('scripts:vendor', function() {
+  return gulp.src(['client/scripts/noop.js'], { read: false })
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(browserify({ debug: false }))
+    .on('prebundle', function(bundle) {
+      bundle.require('react');
+      bundle.require('react-dom');
+      bundle.require('react-router');
+    })
+    .pipe(concat('vendor.js'))
+    .pipe(gulp.dest('public/scripts/'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
     .pipe(gulp.dest('public/scripts/'));
 });
 
-gulp.task('scripts-app', function() {
-  return browserify('client/scripts/app.js', { debug: true, transform: 'babelify' })
-    .external('react')
-    .external('react-dom')
-    .external('react-router')
-    .bundle()
-    .pipe(source('app.js'))
+gulp.task('scripts:app', function() {
+  return gulp.src(['client/scripts/app.js'])
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(browserify({ debug: true, transform: 'babelify' }))
+    .on('prebundle', function(bundle) {
+      bundle.external('react');
+      bundle.external('react-dom');
+      bundle.external('react-router');
+    })
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('public/scripts/'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
     .pipe(gulp.dest('public/scripts/'));
-    //.pipe(rename({suffix: '.min'}))
-    //.pipe(uglify())
-    //.pipe(gulp.dest('public/scripts/'));
 });
 
 gulp.task('scripts', function() {
@@ -115,8 +132,8 @@ gulp.task('bs-reload', function() {
   browserSync.reload();
 });
 
-gulp.task('default', ['scripts-vendor', 'scripts-app', 'browser-sync'], function() {
-  gulp.watch('client/scripts/**/*.js', ['scripts-vendor', 'scripts-app', browserSync.reload]);
+gulp.task('default', ['scripts:vendor', 'scripts:app', 'browser-sync'], function() {
+  gulp.watch('client/scripts/**/*.js', ['scripts:vendor', 'scripts:app', browserSync.reload]);
   gulp.watch('client/stylus/**/*.styl',  ['styles', browserSync.reload]);
   gulp.watch('public/**/*.html', ['bs-reload']);
 });
