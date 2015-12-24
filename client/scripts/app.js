@@ -26,7 +26,7 @@ let Main = React.createClass({
       };
   },
   getRandomVerse: function() {
-    $.get('/api/v1.0/verse/random/', function(data) {
+    $.getJSON('/api/v1.0/verse/random/', function(data) {
       if (this.isMounted()) {
         this.setState({
           verse: data.text,

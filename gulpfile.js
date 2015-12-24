@@ -9,11 +9,13 @@ var gulp = require('gulp'),
     babel = require('gulp-babel'),
     babelify = require('babelify'),
     jshint = require('gulp-jshint'),
+    eslint = require('gulp-eslint'),
     browserSync = require('browser-sync'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     browserify = require('gulp-browserify'),
     nodemon = require('gulp-nodemon'),
+    sourcemaps = require('gulp-sourcemaps'),
     source = require('vinyl-source-stream');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;
@@ -61,6 +63,7 @@ gulp.task('scripts:app', function() {
         console.log(error.message);
         this.emit('end');
     }}))
+    .pipe(sourcemaps.init())
     .pipe(browserify({ debug: true, transform: 'babelify' }))
     .on('prebundle', function(bundle) {
       bundle.external('react');
@@ -71,10 +74,11 @@ gulp.task('scripts:app', function() {
     .pipe(gulp.dest('public/scripts/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('public/scripts/'));
 });
 
-gulp.task('scripts', function() {
+gulp.task('scripts-old', function() {
   return gulp.src(['client/scripts/**/*.js'])
     .pipe(plumber({
       errorHandler: function (error) {
@@ -82,8 +86,6 @@ gulp.task('scripts', function() {
         this.emit('end');
     }}))
     .pipe(browserify({ debug: false }))
-    //.pipe(jshint())
-    //.pipe(jshint.reporter('default'))
     .pipe(babel({ compact: false }))
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest('public/scripts/'))
