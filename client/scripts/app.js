@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { browserHistory, Router, Route, Link } from 'react-router'
 
-var Main = React.createClass({
+let Main = React.createClass({
   render: function() {
     return (
       <div className="container">
@@ -44,6 +44,6 @@ var Main = React.createClass({
 });
 
 render(
-  <Main />,
+  <Main title='Page'/>,
   document.getElementById('app')
 );

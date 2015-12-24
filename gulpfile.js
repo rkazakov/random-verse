@@ -44,14 +44,13 @@ gulp.task('scripts-vendor', function() {
     .pipe(gulp.dest('public/scripts/'));
 });
 
-gulp.task('scripts-bundle', function() {
-  return browserify('client/scripts/main.js', { debug: true, transform: 'babelify' })
+gulp.task('scripts-app', function() {
+  return browserify('client/scripts/app.js', { debug: true, transform: 'babelify' })
     .external('react')
     .external('react-dom')
     .external('react-router')
     .bundle()
-    //.pipe(babel({ compact: true }))
-    .pipe(source('bundle.js'))
+    .pipe(source('app.js'))
     .pipe(gulp.dest('public/scripts/'));
     //.pipe(rename({suffix: '.min'}))
     //.pipe(uglify())
@@ -80,9 +79,9 @@ gulp.task('nodemon', function(cb) {
   var called = false;
   return nodemon({
     // nodemon our expressjs server
-    script: 'app.js',
+    script: 'server.js',
     // watch core server file(s) that require server restart on change
-    watch: ['app.js', 'server/**/*.js']
+    watch: ['server.js', 'server/**/*.js']
   })
   .on('start', function onStart() {
     // ensure start only got called once
@@ -116,8 +115,8 @@ gulp.task('bs-reload', function() {
   browserSync.reload();
 });
 
-gulp.task('default', ['browser-sync'], function() {
-  gulp.watch('client/scripts/**/*.js', ['scripts-vendor', 'scripts-bundle', browserSync.reload]);
+gulp.task('default', ['scripts-vendor', 'scripts-app', 'browser-sync'], function() {
+  gulp.watch('client/scripts/**/*.js', ['scripts-vendor', 'scripts-app', browserSync.reload]);
   gulp.watch('client/stylus/**/*.styl',  ['styles', browserSync.reload]);
   gulp.watch('public/**/*.html', ['bs-reload']);
 });

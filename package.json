@@ -1,6 +1,6 @@
 {
   "name": "RandomVerse",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Random Bible verse app developed with Node.js and React",
   "main": "index.js",
   "scripts": {
@@ -42,10 +42,5 @@
     "gulp-uglify": "^1.5.1",
     "locallydb": "^0.0.9",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
   }
 }
