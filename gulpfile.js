@@ -1,22 +1,20 @@
 'use strict';
 
 var gulp = require('gulp'),
-    //connect = require('gulp-connect'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename'),
     stylus = require('gulp-stylus'),
     minifycss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer'),
-    //cache = require('gulp-cache'),
     babel = require('gulp-babel'),
+    babelify = require('babelify'),
     jshint = require('gulp-jshint'),
     browserSync = require('browser-sync'),
     concat = require('gulp-concat'),
-    //reactify = require('reactify'),
-    //babelify = require('babelify'),
     uglify = require('gulp-uglify'),
-    browserify = require('gulp-browserify'),
-    nodemon = require('gulp-nodemon');
+    browserify = require('browserify'),
+    nodemon = require('gulp-nodemon'),
+    source = require('vinyl-source-stream');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;
 
@@ -35,57 +33,47 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('public/styles/'))
 });
 
+// http://stackoverflow.com/questions/22330103/how-to-include-node-modules-in-a-separate-browserify-vendor-bundle
+gulp.task('scripts-vendor', function() {
+  return browserify({ debug: false })
+    .require('react')
+    .require('react-dom')
+    .require('react-router')
+    .bundle()
+    .pipe(source('vendor.js'))
+    .pipe(gulp.dest('public/scripts/'));
+});
+
+gulp.task('scripts-bundle', function() {
+  return browserify('client/scripts/main.js', { debug: true, transform: 'babelify' })
+    .external('react')
+    .external('react-dom')
+    .external('react-router')
+    .bundle()
+    //.pipe(babel({ compact: true }))
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('public/scripts/'));
+    //.pipe(rename({suffix: '.min'}))
+    //.pipe(uglify())
+    //.pipe(gulp.dest('public/scripts/'));
+});
+
 gulp.task('scripts', function() {
-  return gulp.src('client/scripts/**/*.js')
-    .pipe(plumber())
-    //.pipe(browserify({ transform: 'reactify', debug: true }))
-    .pipe(browserify({ debug: true }))
+  return gulp.src(['client/scripts/**/*.js'])
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(browserify({ debug: false }))
     //.pipe(jshint())
     //.pipe(jshint.reporter('default'))
     .pipe(babel({ compact: false }))
-    .pipe(concat('main.js'))
+    .pipe(concat('bundle.js'))
     .pipe(gulp.dest('public/scripts/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest('public/scripts/'))
-});
-
-gulp.task('vendor', function() {
-  var libs = [
-    'react',
-    // 'react-dom',
-    // 'react-router',
-    // 'flux'
-    // 'react/lib/ReactCSSTransitionGroup',
-    // 'react/lib/cx',
-    // 'q',
-    // 'underscore',
-    // 'loglevel'
-  ];
-
-  var production = (process.env.NODE_ENV === 'production');
-  var stream = gulp.src('./gulp/noop.js', {read: false})
-    .pipe(browserify({
-        debug: false
-    }))
-    .on('prebundle', function(bundle) {
-      // Require vendor libraries and make them available outside the bundle.
-      libs.forEach(function(lib) {
-        bundle.require(lib);
-      });
-    });
-
-  if (production) {
-    // If this is a production build, minify it
-    stream.pipe(uglify());
-  }
-
-  // Give the destination file a name, adding '.min' if this is production
-  stream.pipe(rename('vendor' + (production ? '.min' : '') + '.js'))
-    // Save to the build directory
     .pipe(gulp.dest('public/scripts/'));
-
-  return stream;
 });
 
 gulp.task('nodemon', function(cb) {
@@ -124,12 +112,12 @@ gulp.task('browser-sync', ['nodemon'], function() {
   });
 });
 
-/*gulp.task('bs-reload', function() {
+gulp.task('bs-reload', function() {
   browserSync.reload();
-});*/
+});
 
 gulp.task('default', ['browser-sync'], function() {
-  gulp.watch('client/scripts/**/*.js', ['scripts', browserSync.reload]);
+  gulp.watch('client/scripts/**/*.js', ['scripts-vendor', 'scripts-bundle', browserSync.reload]);
   gulp.watch('client/stylus/**/*.styl',  ['styles', browserSync.reload]);
-  gulp.watch('public/**/*.html', [browserSync.reload]);
+  gulp.watch('public/**/*.html', ['bs-reload']);
 });
