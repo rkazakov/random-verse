@@ -1,19 +1,22 @@
+'use strict';
+
 var gulp = require('gulp'),
-    connect = require('gulp-connect'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename'),
     stylus = require('gulp-stylus'),
     minifycss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer'),
-    cache = require('gulp-cache'),
     babel = require('gulp-babel'),
+    babelify = require('babelify'),
     jshint = require('gulp-jshint'),
+    eslint = require('gulp-eslint'),
     browserSync = require('browser-sync'),
     concat = require('gulp-concat'),
-    reactify = require('reactify'),
     uglify = require('gulp-uglify'),
     browserify = require('gulp-browserify'),
-    nodemon = require('gulp-nodemon');
+    nodemon = require('gulp-nodemon'),
+    sourcemaps = require('gulp-sourcemaps'),
+    source = require('vinyl-source-stream');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;
 
@@ -32,27 +35,72 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('public/styles/'))
 });
 
-gulp.task('scripts', function() {
-  return gulp.src('client/scripts/**/*.js')
-    .pipe(plumber())
-    .pipe(browserify({ transform: 'reactify', debug: true }))
-    //.pipe(jshint())
-    //.pipe(jshint.reporter('default'))
-    .pipe(concat('main.js'))
-    //.pipe(babel())
+// http://stackoverflow.com/questions/22330103/how-to-include-node-modules-in-a-separate-browserify-vendor-bundle
+gulp.task('scripts-vendor', function() {
+  return gulp.src(['client/scripts/noop.js'], { read: false })
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(browserify({ debug: false }))
+    .on('prebundle', function(bundle) {
+      bundle.require('react');
+      bundle.require('react-dom');
+      bundle.require('react-router');
+    })
+    .pipe(concat('vendor.js'))
     .pipe(gulp.dest('public/scripts/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
+    .pipe(gulp.dest('public/scripts/'));
+});
+
+gulp.task('scripts-app', function() {
+  return gulp.src(['client/scripts/app.js'])
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(sourcemaps.init())
+    .pipe(browserify({ debug: true, transform: 'babelify' }))
+    .on('prebundle', function(bundle) {
+      bundle.external('react');
+      bundle.external('react-dom');
+      bundle.external('react-router');
+    })
+    .pipe(concat('app.js'))
     .pipe(gulp.dest('public/scripts/'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('public/scripts/'));
+});
+
+gulp.task('scripts-old', function() {
+  return gulp.src(['client/scripts/**/*.js'])
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(browserify({ debug: false }))
+    .pipe(babel({ compact: false }))
+    .pipe(concat('bundle.js'))
+    .pipe(gulp.dest('public/scripts/'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
+    .pipe(gulp.dest('public/scripts/'));
 });
 
 gulp.task('nodemon', function(cb) {
   var called = false;
   return nodemon({
     // nodemon our expressjs server
-    script: 'app.js',
+    script: 'server.js',
     // watch core server file(s) that require server restart on change
-    watch: ['app.js', 'server/**/*.js']
+    watch: ['server.js', 'server/**/*.js']
   })
   .on('start', function onStart() {
     // ensure start only got called once
@@ -86,8 +134,8 @@ gulp.task('bs-reload', function() {
   browserSync.reload();
 });
 
-gulp.task('default', ['browser-sync'], function() {
-  gulp.watch('client/scripts/**/*.js', ['scripts', browserSync.reload]);
+gulp.task('default', ['scripts-vendor', 'scripts-app', 'browser-sync'], function() {
+  gulp.watch('client/scripts/**/*.js', ['scripts-vendor', 'scripts-app', browserSync.reload]);
   gulp.watch('client/stylus/**/*.styl',  ['styles', browserSync.reload]);
   gulp.watch('public/**/*.html', ['bs-reload']);
 });
