@@ -36,7 +36,7 @@ gulp.task('styles', function() {
 });
 
 // http://stackoverflow.com/questions/22330103/how-to-include-node-modules-in-a-separate-browserify-vendor-bundle
-gulp.task('scripts:vendor', function() {
+gulp.task('scripts-vendor', function() {
   return gulp.src(['client/scripts/noop.js'], { read: false })
     .pipe(plumber({
       errorHandler: function (error) {
@@ -56,8 +56,8 @@ gulp.task('scripts:vendor', function() {
     .pipe(gulp.dest('public/scripts/'));
 });
 
-gulp.task('scripts:app', function() {
-  return gulp.src(['client/scripts/app.js'])
+gulp.task('scripts-app', function() {
+  return gulp.src(['client/scripts/**/*.js', '!client/scripts/noop.js'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
@@ -134,8 +134,8 @@ gulp.task('bs-reload', function() {
   browserSync.reload();
 });
 
-gulp.task('default', ['scripts:vendor', 'scripts:app', 'browser-sync'], function() {
-  gulp.watch('client/scripts/**/*.js', ['scripts:vendor', 'scripts:app', browserSync.reload]);
+gulp.task('default', ['scripts-vendor', 'scripts-app', 'browser-sync'], function() {
+  gulp.watch('client/scripts/**/*.js', ['scripts-vendor', 'scripts-app', browserSync.reload]);
   gulp.watch('client/stylus/**/*.styl',  ['styles', browserSync.reload]);
   gulp.watch('public/**/*.html', ['bs-reload']);
 });

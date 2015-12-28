@@ -2,8 +2,13 @@ import React from 'react'
 import { render } from 'react-dom'
 import { browserHistory, Router, Route, Link } from 'react-router'
 
-let Main = React.createClass({
-  render: function() {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { verse: '', reference: '' };
+    this.getRandomVerse = this.getRandomVerse.bind(this);
+  }
+  render() {
     return (
       <div className="container">
         <div className="row">
@@ -14,36 +19,24 @@ let Main = React.createClass({
           </div>
         </div>
         <div className="row">
-          <input onClick={this.handleClick} className="button-primary" type="button" value="Next verse"/>
+          <input onClick={this.getRandomVerse} className="button-primary" type="button" value="Next verse"/>
         </div>
       </div>
     );
-  },
-  getInitialState: function() {
-      return {
-          verse: '',
-          reference: ''
-      };
-  },
-  getRandomVerse: function() {
+  }
+  getRandomVerse() {
     $.getJSON('/api/v1.0/verse/random/', function(data) {
-      if (this.isMounted()) {
         this.setState({
           verse: data.text,
           reference: data.reference
         });
-      }
     }.bind(this));
-  },
-  componentDidMount: function() {
-    this.getRandomVerse();
-  },
-  handleClick: function() {
+  }
+  componentDidMount() {
     this.getRandomVerse();
   }
-});
+};
 
-render(
-  <Main title='Page'/>,
-  document.getElementById('app')
-);
+render((
+  <App title='Main'/>
+), document.getElementById('app'));
