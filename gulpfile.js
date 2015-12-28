@@ -57,7 +57,7 @@ gulp.task('scripts-vendor', function() {
 });
 
 gulp.task('scripts-app', function() {
-  return gulp.src(['client/scripts/**/*.js', '!client/scripts/noop.js'])
+  return gulp.src(['client/scripts/app.js'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);

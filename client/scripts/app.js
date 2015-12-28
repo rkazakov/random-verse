@@ -2,6 +2,8 @@ import React from 'react'
 import { render } from 'react-dom'
 import { browserHistory, Router, Route, Link } from 'react-router'
 
+import Share from './share';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +22,9 @@ class App extends React.Component {
         </div>
         <div className="row">
           <input onClick={this.getRandomVerse} className="button-primary" type="button" value="Next verse"/>
+        </div>
+        <div className="row">
+          <Share />
         </div>
       </div>
     );
