@@ -4,6 +4,9 @@
 .reference {
   float: right;
 }
-.test {
+.text {
   margin-top: 25%;
+}
+.button-read {
+  margin-top: 2.5em;
 }

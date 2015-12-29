@@ -3,10 +3,10 @@ import { render } from 'react-dom'
 import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router'
 
 // Components
-import Home from './Home';
-import Verse from './Verse';
-import Share from './Share';
-import NotFound from './NotFound';
+import Home from './components/Home';
+import Verse from './components/Verse';
+import Share from './components/Share';
+import NotFound from './components/NotFound';
 
 class App extends React.Component {
   constructor(props) {

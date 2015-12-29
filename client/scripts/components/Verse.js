@@ -4,25 +4,29 @@ export default class Verse extends React.Component {
   constructor(props) {
     super(props);
     this.state = { verse: '', reference: '' };
-    this.getRandomVerse = this.getRandomVerse.bind(this);
+    this.getNext = this.getNext.bind(this);
+    this.getPrev = this.getPrev.bind(this);
   }
   render() {
     return (
       <div>
         <div className="row">
-          <div className="one-half column test">
+          <div className="one-half column text">
             <p className="verse">{this.state.verse}</p>
             <p className="reference">{this.state.reference}</p>
           </div>
         </div>
         <div className="row">
-          <input type="button" value="Back"/>
-          <input onClick={this.getRandomVerse} className="button-primary" type="button" value="Next"/>
+          <input onClick={this.getPrev} type="button" value="Back"/>
+          <input onClick={this.getNext} className="button-primary" type="button" value="Next"/>
         </div>
       </div>
     );
   }
-  getRandomVerse() {
+  getPrev() {
+    // TODO: use React Router history to implement back action
+  }
+  getNext() {
     let id = this.props.params.id;
     let url = id ? '/api/v1.0/verse/' + id : '/api/v1.0/verse';
     $.getJSON(url, function(data) {
@@ -33,6 +37,6 @@ export default class Verse extends React.Component {
     }.bind(this));
   }
   componentDidMount() {
-    this.getRandomVerse();
+    this.getNext();
   }
 };
