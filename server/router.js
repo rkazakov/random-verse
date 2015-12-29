@@ -6,7 +6,7 @@ var collection = db.collection('verses');
 var router = module.exports = require('express').Router();
 
 router
-.get('/api/v1.0/verse/random', function (req, res, next) {
+.get('/api/v1.0/verse', function (req, res, next) {
   var random = Math.floor(Math.random() * 14);
   var ref = collection.get(random).reference;
   var cid = collection.get(random).cid;
