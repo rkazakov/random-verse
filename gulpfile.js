@@ -57,7 +57,7 @@ gulp.task('scripts-vendor', function() {
 });
 
 gulp.task('scripts-app', function() {
-  return gulp.src(['client/scripts/app.js'])
+  return gulp.src(['client/scripts/App.js'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
@@ -78,21 +78,21 @@ gulp.task('scripts-app', function() {
     .pipe(gulp.dest('public/scripts/'));
 });
 
-gulp.task('scripts-old', function() {
-  return gulp.src(['client/scripts/**/*.js'])
-    .pipe(plumber({
-      errorHandler: function (error) {
-        console.log(error.message);
-        this.emit('end');
-    }}))
-    .pipe(browserify({ debug: false }))
-    .pipe(babel({ compact: false }))
-    .pipe(concat('bundle.js'))
-    .pipe(gulp.dest('public/scripts/'))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(uglify())
-    .pipe(gulp.dest('public/scripts/'));
-});
+// gulp.task('scripts-old', function() {
+//   return gulp.src(['client/scripts/**/*.js'])
+//     .pipe(plumber({
+//       errorHandler: function (error) {
+//         console.log(error.message);
+//         this.emit('end');
+//     }}))
+//     .pipe(browserify({ debug: false }))
+//     .pipe(babel({ compact: false }))
+//     .pipe(concat('bundle.js'))
+//     .pipe(gulp.dest('public/scripts/'))
+//     .pipe(rename({suffix: '.min'}))
+//     .pipe(uglify())
+//     .pipe(gulp.dest('public/scripts/'));
+// });
 
 gulp.task('nodemon', function(cb) {
   var called = false;

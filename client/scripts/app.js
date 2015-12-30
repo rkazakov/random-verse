@@ -1,47 +1,33 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { browserHistory, Router, Route, Link } from 'react-router'
+import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router'
 
-import Share from './share';
+import history from './components/history'
+
+// Components
+import Home from './components/Home';
+import Verse from './components/Verse';
+import Share from './components/Share';
+import NotFound from './components/NotFound';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { verse: '', reference: '' };
-    this.getRandomVerse = this.getRandomVerse.bind(this);
   }
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="one-half column test">
-            <h4>{this.props.title}</h4>
-            <p className="verse">{this.state.verse}</p>
-            <p className="reference">{this.state.reference}</p>
-          </div>
-        </div>
-        <div className="row">
-          <input onClick={this.getRandomVerse} className="button-primary" type="button" value="Next verse"/>
-        </div>
-        <div className="row">
-          <Share />
-        </div>
-      </div>
+      <div> {this.props.children || <Home />} </div>
     );
-  }
-  getRandomVerse() {
-    $.getJSON('/api/v1.0/verse/random/', function(data) {
-        this.setState({
-          verse: data.text,
-          reference: data.reference
-        });
-    }.bind(this));
-  }
-  componentDidMount() {
-    this.getRandomVerse();
   }
 };
 
 render((
-  <App title='Main'/>
+  <Router history={history}>
+    <Route path='/' component={Verse}>
+      // <IndexRoute component={Home} />
+      // <Route path='verse' component={Verse} />
+      <Route path='/:id' component={Verse} />
+      <Route path='*' component={NotFound} />
+    </Route>
+  </Router>
 ), document.getElementById('app'));

@@ -1,6 +1,6 @@
 {
   "name": "RandomVerse",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Random Bible verse app developed with Node.js and React",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "Developers for Christ",
   "license": "MIT",
   "dependencies": {
+    "ejs": "^2.3.4",
     "express": "^4.13.3",
     "flux": "^2.1.1",
     "react": "^0.14.3",
