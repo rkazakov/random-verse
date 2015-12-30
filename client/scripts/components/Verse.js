@@ -1,5 +1,7 @@
 import React from 'react'
 
+import history from './history'
+
 export default class Verse extends React.Component {
   constructor(props) {
     super(props);
@@ -9,7 +11,7 @@ export default class Verse extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div className="container">
         <div className="row">
           <div className="one-half column text">
             <p className="verse">{this.state.verse}</p>
@@ -18,7 +20,7 @@ export default class Verse extends React.Component {
         </div>
         <div className="row">
           <input onClick={this.getPrev} type="button" value="Back"/>
-          <input onClick={this.getNext} className="button-primary" type="button" value="Next"/>
+          <input onClick={this.getNext} className="button button-primary" type="button" value="Next"/>
         </div>
       </div>
     );
@@ -28,13 +30,18 @@ export default class Verse extends React.Component {
   }
   getNext() {
     let id = this.props.params.id;
-    let url = id ? '/api/v1.0/verse/' + id : '/api/v1.0/verse';
+    let url = id ? '/api/v1.0/verse/' + id : '/api/v1.0/verse/';
     $.getJSON(url, function(data) {
         this.setState({
           verse: data.text,
           reference: data.reference
         });
     }.bind(this));
+
+    /*$.getJSON('/api/v1.0/verse', function(data) {
+      //history.replaceState(null, '/verse/' + data.cid);
+      //location.hash = "#value";
+    }.bind(this));*/
   }
   componentDidMount() {
     this.getNext();

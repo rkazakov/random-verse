@@ -2,6 +2,8 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router'
 
+import history from './components/history'
+
 // Components
 import Home from './components/Home';
 import Verse from './components/Verse';
@@ -14,11 +16,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          {this.props.children}
-        </div>
-      </div>
+      <div> {this.props.children || <Home />} </div>
     );
   }
 };
@@ -26,9 +24,9 @@ class App extends React.Component {
 render((
   <Router history={browserHistory}>
     <Route path='/' component={App}>
-      <IndexRoute component={Home} />
-      <Route path='verse' component={Verse} />
-      <Route path='verse/:id' component={Verse} />
+      // <IndexRoute component={Home} />
+      // <Route path='verse' component={Verse} />
+      <Route path='/:id' component={Verse} />
       <Route path='*' component={NotFound} />
     </Route>
   </Router>
