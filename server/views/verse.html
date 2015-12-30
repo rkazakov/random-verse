@@ -17,17 +17,15 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/favicon.png">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script>
-    var mainURL = window.location.href;
-    if (mainURL.match('#')) {
-      var qurl = mainURL.replace('#', '');
-      location.href = qurl;
-    }
-  </script>
 </head>
 <body>
-  <div class='container' id='app'></div>
-  <script src='./scripts/vendor.js'></script>
-  <script src='./scripts/app.js'></script>
+  <div className="container">
+    <div className="row">
+      <div className="one-half column text">
+        <p className="verse"><%= text %></p>
+        <p className="reference"><%= reference %></p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

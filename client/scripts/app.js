@@ -23,9 +23,9 @@ class App extends React.Component {
 
 render((
   <Router history={history}>
-    <Route path='/' component={App}>
+    <Route path='/' component={Verse}>
       // <IndexRoute component={Home} />
-      //<Route path='verse' component={Verse} />
+      // <Route path='verse' component={Verse} />
       <Route path='/:id' component={Verse} />
       <Route path='*' component={NotFound} />
     </Route>

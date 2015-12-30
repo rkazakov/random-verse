@@ -27,11 +27,13 @@ export default class Verse extends React.Component {
   }
   getPrev() {
     // TODO: use React Router history to implement back action
+    history.goBack();
   }
   getNext() {
-    //let id = this.props.params.id;
-    //let url = id ? '/api/v1.0/verse/' + id : '/api/v1.0/verse/';
-    $.getJSON('/api/v1.0/verse', function(data) {
+    let id = this.props.params.id;
+    //console.log(id);
+    let url = id ? '/api/v1.0/verse/' + id : '/api/v1.0/verse/';
+    $.getJSON(url, function(data) {
       this.setState({
         verse: data.text,
         reference: data.reference
