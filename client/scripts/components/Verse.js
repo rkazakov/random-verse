@@ -14,8 +14,8 @@ export default class Verse extends React.Component {
       <div className="container">
         <div className="row">
           <div className="one-half column text">
-            <p className="verse">{this.state.verse}</p>
-            <p className="reference">{this.state.reference}</p>
+            <span className="verse">{this.state.verse}</span>
+            <span className="reference"> ({this.state.reference})</span>
           </div>
         </div>
         <div className="row">
