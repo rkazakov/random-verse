@@ -31,14 +31,14 @@ export default class Verse extends React.Component {
   }
   getNext() {
     let id = this.props.params.id;
-    //console.log(id);
+    console.log(id);
     let url = id ? '/api/v1.0/verse/' + id : '/api/v1.0/verse/';
     $.getJSON(url, function(data) {
       this.setState({
         verse: data.text,
         reference: data.reference
       });
-      location.hash = data.cid;
+      //location.hash = data.cid;
     }.bind(this));
 
     /*$.getJSON('/api/v1.0/verse', function(data) {
